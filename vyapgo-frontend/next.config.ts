@@ -1,4 +1,7 @@
+import path from "node:path";
 import type { NextConfig } from "next";
+
+const isVercel = process.env.VERCEL === "1";
 
 const nextConfig: NextConfig = {
   // ✅ Disables the buggy CSS optimizer in Next.js 15.3.x
@@ -6,8 +9,11 @@ const nextConfig: NextConfig = {
     optimizeCss: false,
   },
 
-  // ✅ Ensures clean Vercel builds & Docker portability
-  output: "standalone",
+  // Use standalone output only for non-Vercel self-hosted targets (Docker, VM).
+  ...(isVercel ? {} : { output: "standalone" }),
+
+  // Avoid monorepo lockfile/root mis-detection during tracing.
+  outputFileTracingRoot: path.resolve(__dirname),
 
   compiler: {
     removeConsole: process.env.NODE_ENV === "production",

@@ -1,36 +1,64 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Vyapgo Frontend
 
-## Getting Started
+Next.js frontend app for Vyapgo.
 
-First, run the development server:
+## Local Development
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Production Build Check
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run build
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+If this succeeds locally, Vercel build is usually good once environment variables are set.
 
-## Learn More
+## Vercel Deployment (Monorepo)
 
-To learn more about Next.js, take a look at the following resources:
+This repository is a monorepo. In Vercel project settings, set:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Root Directory: `vyapgo-frontend`
+- Framework Preset: `Next.js`
+- Install Command: `npm install`
+- Build Command: `npm run build`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+`vercel.json` is included in this folder to keep install/build commands explicit.
 
-## Deploy on Vercel
+## Environment Variables
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Copy from `.env.example` and set the same keys in Vercel.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Required for Firebase auth in browser:
+
+- NEXT_PUBLIC_FIREBASE_API_KEY
+- NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
+- NEXT_PUBLIC_FIREBASE_PROJECT_ID
+- NEXT_PUBLIC_FIREBASE_APP_ID
+- NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID (fallback to NEXT_PUBLIC_FIREBASE_SENDER_ID is supported)
+
+Commonly needed client vars:
+
+- NEXT_PUBLIC_API_URL
+- NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
+- NEXT_PUBLIC_USE_SERVER_OTP
+- NEXT_PUBLIC_AUTH_PERSISTENCE
+
+Needed only if using server OTP / Twilio API routes:
+
+- SMS_PROVIDER
+- TWILIO_ACCOUNT_SID
+- TWILIO_AUTH_TOKEN
+- TWILIO_VERIFY_SID
+- TWILIO_FROM
+
+Needed only for Firebase Admin usage on server routes:
+
+- FIREBASE_PROJECT_ID
+- FIREBASE_CLIENT_EMAIL
+- FIREBASE_PRIVATE_KEY
+
+For `FIREBASE_PRIVATE_KEY` in Vercel, paste with escaped newlines (`\n`).
